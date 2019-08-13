@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Sounds from './components/Sounds';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -42,6 +43,7 @@ async function loadResourcesAsync() {
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
   ]);
+  
 }
 
 function handleLoadingError(error) {

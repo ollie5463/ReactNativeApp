@@ -1,7 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import { Button } from 'react-native'
-import { Database } from '../database/Database';
+import { Database } from '../components/Database';
 import {
   Image,
   Platform,
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import { MonoText } from '../components/StyledText';
+import Sounds from '../components/Sounds';
 
 export default function HomeScreen() {
   return (
@@ -77,6 +78,9 @@ function handleLearnMorePress() {
 
 function createDB() {
   const databaseExample = new Database();
+  const sounds = new Sounds();
+  sounds.initSounds();
+  // sounds.sounds.background_music.playAsync();
 }
 
 
