@@ -21,13 +21,13 @@ export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
     createSounds();
-    createDB();
-    this.state = { showPlayButton: true }
+    this.state = {
+      showPlayButton: true,
+      currentSong: null,
+    }
   }
 
   render() {
-    console.log(this.state);
-    // this.setState({ showPlayButton: false });
     return (
       <View style={styles.container}>
         <View style={styles.skipBackwardButton}>
@@ -36,13 +36,15 @@ export default class HomeScreen extends Component {
           <View style={styles.playButton}>
           <Ionicons name={this.state.showPlayButton ? "ios-play" : "ios-pause"} size={150} onPress={() => {
             if (this.state.showPlayButton) {
-               playSound();
+              playSound();
             } else {
               pauseSound();
             }
             this.setState({ 
               showPlayButton: !this.state.showPlayButton
-             }) }}/>
+            })
+            }
+          } />
         </View>
         <View style={styles.skipButton}>
             <Ionicons name="ios-skip-forward" size={100}/>
@@ -57,19 +59,28 @@ HomeScreen.navigationOptions = {
 };
 
 function pauseSound() {
-  sounds.sounds.background_music.pauseAsync();
+  sounds.sounds.classical_music_2.pauseAsync();
 }
 
-function playSound() {
-  sounds.sounds.background_music.playAsync();
+function playSound(state) {
+  getSound().then((result) => {
+    sounds.sounds[result.rows._array[0].Name].playAsync();
+  })
+}
+
+function getSound() {
+  return new Promise((resolve) => {
+    const dataBase = new Database();
+    dataBase.DB.transaction(tx => {
+        tx.executeSql(`SELECT Name FROM Song WHERE ID=1`, [], (tx, result) => {
+          resolve(result);
+        })
+    });
+  })
 }
 
 function createSounds() {
   sounds.initSounds();
-}
-
-function createDB() {
-  const databaseExample = new Database();
 }
 
 

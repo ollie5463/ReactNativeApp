@@ -9,10 +9,30 @@ export class Database {
         // this.printTables();
     }
 
-    executeSql(sqlStatement) {
+    getFirstSongFromDB(sqlStatement) {
+        let sqlResult = null;
         this.DB.transaction(tx => {
-            tx.executeSql(sqlStatement)
+            tx.executeSql(sqlStatement, [], (tx, result) => {
+                sqlResult = result;
+            })
         });
+        // console.log(sqlResult);
+        // return sqlResult;
+        // this.DB.transaction(tx => {
+        //     tx.executeSql(`SELECT * FROM Song WHERE ID=1`, [], (tx, result) => {
+        //         console.log('RESULTTTTT >>>>>', result)
+        //     })
+        // });
+    }
+
+    executeSql(sqlStatement) {
+        let sqlResult = null;
+        this.DB.transaction(tx => {
+            tx.executeSql(sqlStatement, [], (tx, result) => {
+                sqlResult = result;
+            })
+        });
+        return sqlResult;
     }
 
     createDBEntries() {
@@ -23,7 +43,7 @@ export class Database {
             tx.executeSql(`INSERT INTO Playlist (Name) values ('ollies playlist');`)
         });
         this.DB.transaction(tx => {
-            tx.executeSql(`INSERT INTO Song (Name) values ('song1');`)
+            tx.executeSql(`INSERT INTO Song (Name) values ('background_music');`)
         });
     }
 
@@ -57,7 +77,7 @@ export class Database {
         this.DB.transaction(tx => { // Song
             tx.executeSql(
                 `CREATE TABLE Song (
-                    ID INTEGER,
+                    ID INTEGER PRIMARY KEY,
                     Name varchar(255),
                     Album_ID INTEGER,
                     Playlist_ID INTEGER,
