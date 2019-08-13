@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { Component } from 'react';
 import { Button } from 'react-native'
 import { Database } from '../components/Database';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,27 +17,48 @@ import { MonoText } from '../components/StyledText';
 import Sounds from '../components/Sounds';
 
 const sounds = new Sounds();
-export default function HomeScreen() {
-  createSounds();
-  createDB();
-  return (
-    <View style={styles.container}>
-      <View style={styles.skipBackwardButton}>
-          <Ionicons name="ios-skip-backward" size={100}/>
+export default class HomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    createSounds();
+    createDB();
+    this.state = { showPlayButton: true }
+  }
+
+  render() {
+    console.log(this.state);
+    // this.setState({ showPlayButton: false });
+    return (
+      <View style={styles.container}>
+        <View style={styles.skipBackwardButton}>
+            <Ionicons name="ios-skip-backward" size={100}/>
+        </View>
+          <View style={styles.playButton}>
+          <Ionicons name={this.state.showPlayButton ? "ios-play" : "ios-pause"} size={150} onPress={() => {
+            if (this.state.showPlayButton) {
+               playSound();
+            } else {
+              pauseSound();
+            }
+            this.setState({ 
+              showPlayButton: !this.state.showPlayButton
+             }) }}/>
+        </View>
+        <View style={styles.skipButton}>
+            <Ionicons name="ios-skip-forward" size={100}/>
+        </View>
       </View>
-        <View style={styles.playButton}>
-          <Ionicons name="ios-play" size={150} onPress={playSound}/>
-      </View>
-      <View style={styles.skipButton}>
-          <Ionicons name="ios-skip-forward" size={100}/>
-      </View>
-    </View>
-  );
+    );
+  }
 }
 
 HomeScreen.navigationOptions = {
   header: null,
 };
+
+function pauseSound() {
+  sounds.sounds.background_music.pauseAsync();
+}
 
 function playSound() {
   sounds.sounds.background_music.playAsync();
