@@ -7,7 +7,6 @@ export class Database {
     }
 
     createDB() {
-        
         // Drop tables
         this.DB.transaction(tx => {
             tx.executeSql('DROP TABLE Playlist')
@@ -20,14 +19,14 @@ export class Database {
         this.DB.transaction(tx => {
             tx.executeSql(
                 `CREATE TABLE Album (
-                            ID integer,
-                            Name varchar(255)
+                        ID INTEGER PRIMARY KEY,
+                        Name varchar(255) 
                         );`)
                     });
         this.DB.transaction(tx => {
             tx.executeSql(
                 `CREATE TABLE Playlist (
-                    ID integer,
+                    ID INTEGER PRIMARY KEY,
                     Name varchar(255)
                 );`)
             });

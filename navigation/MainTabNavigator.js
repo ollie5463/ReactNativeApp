@@ -23,11 +23,9 @@ HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
-      focused={focused}
+      focused={focused} // maybe add some functionality here like a highlight
       name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+        `ios-home`
       }
     />
   ),
@@ -35,42 +33,42 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+const PlaylistsStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    PlaylistsStack: LinksScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+PlaylistsStack.navigationOptions = {
+  tabBarLabel: 'Playlists',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name='ios-musical-notes' />
   ),
 };
 
-LinksStack.path = '';
+PlaylistsStack.path = '';
 
-const SettingsStack = createStackNavigator(
+const SearchStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    SearchStack: SettingsScreen,
   },
   config
 );
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+SearchStack.navigationOptions = {
+  tabBarLabel: 'Search',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon focused={focused} name={'ios-search'} />
   ),
 };
 
-SettingsStack.path = '';
+SearchStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
+  PlaylistsStack,
+  SearchStack,
 });
 
 tabNavigator.path = '';

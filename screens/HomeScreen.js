@@ -47,14 +47,6 @@ export default function HomeScreen() {
 
         <View style={styles.helpContainer}>
           <Button title="create DB" onPress={createDB} />
-          
-
-
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -62,7 +54,6 @@ export default function HomeScreen() {
         <Text style={styles.tabBarInfoText}>
           This is a tab bar. You can edit it in:
         </Text>
-
         <View
           style={[styles.codeHighlightContainer, styles.navigationFilename]}>
           <MonoText style={styles.codeHighlightText}>
@@ -86,14 +77,8 @@ function handleLearnMorePress() {
 
 function createDB() {
   const databaseExample = new Database();
-  // console.log(databaseExample.DB);
 }
 
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
