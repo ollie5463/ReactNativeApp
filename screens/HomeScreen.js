@@ -36,9 +36,12 @@ export default class HomeScreen extends Component {
           <View style={styles.playButton}>
           <Ionicons name={this.state.showPlayButton ? "ios-play" : "ios-pause"} size={150} onPress={() => {
             if (this.state.showPlayButton) {
-              playSound();
+              getCurrentSong().then((song) => {
+                this.setState({ currentSong: song });
+                playSound(this.state.currentSong);
+              });
             } else {
-              pauseSound();
+              pauseSound(this.state.currentSong);
             }
             this.setState({ 
               showPlayButton: !this.state.showPlayButton
@@ -58,14 +61,20 @@ HomeScreen.navigationOptions = {
   header: null,
 };
 
-function pauseSound() {
-  sounds.sounds.classical_music_2.pauseAsync();
+function pauseSound(songName) {
+  sounds.sounds[songName].pauseAsync();
 }
 
-function playSound(state) {
-  getSound().then((result) => {
-    sounds.sounds[result.rows._array[0].Name].playAsync();
+function getCurrentSong() {
+  return new Promise((resolve) => {
+    getSound().then((result) => {
+      resolve(result.rows._array[0].Name);
+    })
   })
+}
+
+function playSound(songName) {
+  sounds.sounds[songName].playAsync();
 }
 
 function getSound() {
