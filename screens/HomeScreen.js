@@ -1,7 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
 import { Button } from 'react-native'
-import { Database } from '../components/Database';
 import { Ionicons } from '@expo/vector-icons';
 import {
   Image,
@@ -13,10 +12,10 @@ import {
   View,
 } from 'react-native';
 
-import { MonoText } from '../components/StyledText';
+import Helper from '../Helper';
 import Sounds from '../components/Sounds';
 
-const sounds = new Sounds();
+Helper.init(); // This should be in the App.js
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +61,7 @@ HomeScreen.navigationOptions = {
 };
 
 function pauseSound(songName) {
-  sounds.sounds[songName].pauseAsync();
+  Sounds.sounds[songName].pauseAsync();
 }
 
 function getCurrentSong() {
@@ -74,12 +73,12 @@ function getCurrentSong() {
 }
 
 function playSound(songName) {
-  sounds.sounds[songName].playAsync();
+  Sounds.sounds[songName].playAsync();
 }
 
 function getSound() {
   return new Promise((resolve) => {
-    const dataBase = new Database();
+    const dataBase = Helper.database;
     dataBase.DB.transaction(tx => {
         tx.executeSql(`SELECT Name FROM Song WHERE ID=1`, [], (tx, result) => {
           resolve(result);
@@ -89,7 +88,7 @@ function getSound() {
 }
 
 function createSounds() {
-  sounds.initSounds();
+  Sounds.initSounds();
 }
 
 
