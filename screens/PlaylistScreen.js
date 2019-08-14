@@ -1,17 +1,41 @@
-import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import Helper from '../Helper';
 
-export default function PlaylistScreen() {
-  return (
-    <ScrollView style={styles.container}>
-      {/**
-       * Go ahead and delete ExpoLinksView and replace it with your content;
-       * we just wanted to provide you with some helpful links.
-       */}
-      <ExpoLinksView />
-    </ScrollView>
-  );
+
+export default class PlaylistScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { playlists: [] };
+  }
+
+  componentDidMount() {
+    getPlaylistsForScreen().then((playlists) => {
+      this.setState({playlists: playlists.rows._array})
+      console.log('state >>>>', this.state)
+    });
+  }
+
+  render() {
+    return (
+    <View style={styles.container}>
+      <Text>
+        Playlist 5hundo
+      </Text>
+    </View>
+    )
+  }
+}
+
+function getPlaylistsForScreen() {
+  return new Promise((resolve) => {
+    const dataBase = Helper.database;
+    dataBase.DB.transaction(tx => {
+        tx.executeSql(`SELECT * FROM Playlist`, [], (tx, result) => {
+          resolve(result);
+        })
+    });
+  })
 }
 
 PlaylistScreen.navigationOptions = {

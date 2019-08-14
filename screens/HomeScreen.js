@@ -1,6 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
-import { Button } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import {
   Image,
@@ -19,7 +18,7 @@ Helper.init(); // This should be in the App.js
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    createSounds();
+    createSounds(); // This should be in App.js also
     this.state = {
       showPlayButton: true,
       currentSong: null,

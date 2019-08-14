@@ -13,7 +13,10 @@ export class Database {
             tx.executeSql(`INSERT INTO Album (Name) values ('album1');`)
         });
         this.DB.transaction(tx => {
-            tx.executeSql(`INSERT INTO Playlist (Name) values ('ollies playlist');`)
+            tx.executeSql(`INSERT INTO Playlist (Name) values ('Michaels playlist');`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Playlist (Name) values ('Ollies playlist');`)
         });
         this.DB.transaction(tx => {
             tx.executeSql(`INSERT INTO Song (Name) values ('classical_music_1');`)
