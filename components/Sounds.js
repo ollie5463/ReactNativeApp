@@ -4,6 +4,15 @@ import React, { Component } from 'react';
 export class Sounds extends Component{
 
     static async initSounds() {
+        Audio.setAudioModeAsync({
+            playsInSilentModeIOS: true,
+            allowsRecordingIOS: true,
+            staysActiveInBackground: true,
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            shouldDuckAndroid: false,
+            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
+            playThroughEarpieceAndroid: true
+        });
         this.sounds = {};
         this.sounds.background_music = new Audio.Sound();
         this.sounds.classical_music_1 = new Audio.Sound();
