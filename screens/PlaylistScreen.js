@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import Helper from '../Helper';
 
 
@@ -11,17 +11,24 @@ export default class PlaylistScreen extends Component {
 
   componentDidMount() {
     getPlaylistsForScreen().then((playlists) => {
-      this.setState({playlists: playlists.rows._array})
-      console.log('state >>>>', this.state)
+      let textElements = this.state.playlists;
+      playlists.rows._array.forEach((playlist, index) => {
+        textElements.push(<Button key={index} title={playlist.Name}></Button>);
+      });
+      this.setState({ playlists: textElements });
     });
   }
 
   render() {
     return (
-    <View style={styles.container}>
-      <Text>
-        Playlist 5hundo
-      </Text>
+      <View style={styles.container}>
+        <View style = {{flex: 2}}></View>
+        <View style={styles.playlists}>
+        {this.state.playlists.map((value) => {
+          return value;
+        }) }
+        </View>
+        <View style={styles.playlists}></View>
     </View>
     )
   }
@@ -45,7 +52,14 @@ PlaylistScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
+    width: 500,
+    height: 500,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  playlists: {
+    flex: 2,
+    width: 150,
+    height: 400,
+  }
 });
