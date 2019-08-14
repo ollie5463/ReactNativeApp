@@ -4,43 +4,56 @@ import {
   FlatList,
   View,
 } from 'react-native';
-import { ListItem, SearchBar } from 'react-native-elements';
+import { ListItem, SearchBar, ButtonGroup } from 'react-native-elements';
 import Helper from '../Helper';
+import _ from 'lodash';
 
 export default class SearchScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = {
+      data: [],
+      fullData: [],
+      search: '',
+      selectedIndex: 1
+    };
   }
 
   componentDidMount() {
     getSongs().then((songs) => {
       const data = songs.rows._array;
-      console.log(data);
       this.setState({ data });
+      this.setState({ fullData: data });
       }
     );
   }
 
-  renderHeader = () => {
-    return <SearchBar key="Search bar" placeholder="Type here"/>
+  handleSearch = search => {
+    const formattedQuery = search.toLowerCase();
+    const data = _.filter(this.state.fullData, user => {
+      return contains(user, formattedQuery);
+    });
+
+    this.setState({ search, data });
   }
+
+
   render() {
     if (this.state.data.length !== 0) {
-      console.log('length is greater than 0');
       return (
         <View>
+          <SearchBar placeholder="Type here..."
+              lightTheme round
+              onChangeText={this.handleSearch}
+              value={this.state.search}
+            />
           <FlatList
-            // data={[
-            //   { name: 'song 1' },
-            //   { name: 'song 2' }]}
             data={this.state.data}
             renderItem={({ item }) => (
               <ListItem
                 title={item.Name}/>
             )}
             keyExtractor={item => item.Name}
-            ListHeaderComponent={this.renderHeader}
           />
         </View>
       );
@@ -53,6 +66,13 @@ export default class SearchScreen extends Component {
 SearchScreen.navigationOptions = {
   title: 'Search screen',
 };
+
+function contains({ Name }, query) {
+  if (Name.includes(query)) {
+    return true;
+  }
+  return false;
+}
 
 function getSongs() {
   return new Promise((resolve) => {
