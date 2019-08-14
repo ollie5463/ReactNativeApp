@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import Helper from '../Helper';
-
 
 export default class PlaylistScreen extends Component {
   constructor(props) {
@@ -13,7 +12,8 @@ export default class PlaylistScreen extends Component {
     getPlaylistsForScreen().then((playlists) => {
       let textElements = this.state.playlists;
       playlists.rows._array.forEach((playlist, index) => {
-        textElements.push(<Button key={index} title={playlist.Name}></Button>);
+        textElements.push(<Button key={index} title={playlist.Name}
+          onPress={buttonPressed}></Button>);
       });
       this.setState({ playlists: textElements });
     });
@@ -27,11 +27,27 @@ export default class PlaylistScreen extends Component {
         {this.state.playlists.map((value) => {
           return value;
         }) }
+          <Button title="Create new playlist" onPress={createNewPlaylist}></Button>
+              <TextInput
+            style={{ height: 40, width: 100, borderColor: 'gray', borderWidth: 1}}
+            onChangeText={(text) => this.setState({text})}
+            value={this.state.text}
+          />
         </View>
-        <View style={styles.playlists}></View>
+        <View style={styles.playlists}>
+        </View>
     </View>
     )
   }
+}
+
+function createNewPlaylist(props) {
+  debugger;
+  console.log(props);
+}
+
+function buttonPressed(props) {
+  console.log(props);
 }
 
 function getPlaylistsForScreen() {
