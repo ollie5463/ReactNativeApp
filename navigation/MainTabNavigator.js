@@ -5,7 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import PlaylistScreen from '../screens/PlaylistScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -51,7 +51,7 @@ PlaylistsStack.path = '';
 
 const SearchStack = createStackNavigator(
   {
-    SearchStack: SettingsScreen,
+    SearchStack: SearchScreen,
   },
   config
 );

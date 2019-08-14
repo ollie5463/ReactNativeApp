@@ -6,7 +6,6 @@ export class Database {
         this.resetTables();
         this.createDBTables();
         this.createDBEntries();
-        // this.printTables();
     }
     createDBEntries() {
         this.DB.transaction(tx => {
@@ -20,6 +19,12 @@ export class Database {
         });
         this.DB.transaction(tx => {
             tx.executeSql(`INSERT INTO Song (Name) values ('classical_music_1');`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name) values ('classical_music_2');`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name) values ('background_music');`)
         });
     }
 
