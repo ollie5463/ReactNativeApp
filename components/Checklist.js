@@ -17,16 +17,14 @@ export class CheckList extends Component {
     itemChosen(item) {
         if (this.state.chosenItems.indexOf(item.Name) === -1) {
             this.state.chosenItems.push(item.Name)
-        } else {
-            // remove element from the array
         }
     }
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center' }} >
+            <View style={{flex: 2, justifyContent: 'center' }} >
                 <TextInput
-                    style={{ fontSize: 20, height: 40, width: 250, borderColor: "#D3D3D3", borderWidth: 1}}
+                    style={{  fontSize: 20, height: 40, width: 250, borderColor: "#D3D3D3", borderWidth: 1}}
                     onChangeText={(playlistName) => this.setState({ playlistName })}
                     placeholder="Enter new playlist name"    
                     value={this.state.playlistName}
@@ -34,15 +32,14 @@ export class CheckList extends Component {
                 <View>
             </View>
                 <FlatList
-                    style={{ flex: 2, backgroundColor:"#D3D3D3" }}
+                    style={{ borderRadius: 5, flex: 2, backgroundColor:"#D3D3D3" }}
                     data={this.props.listOfSongs}
                     renderItem={({ item }) => (
                         <ListItem
                             onPress={(() => { this.itemChosen(item); })}
                             title={item.Name}
-                            containerStyle={{ borderWidth: 1, borderColor: "#D3D3D3" }}
+                            containerStyle={{ borderRadius: 5, borderWidth: 1, borderColor: "#D3D3D3" }}
                         />
-                        
                         )}
                     keyExtractor={item => item.Name}
                 />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import Helper from '../Helper';
+import { ListItem } from 'react-native-elements'
 import { CheckList } from '../components/Checklist';
 
 export default class PlaylistScreen extends Component {
@@ -8,16 +9,18 @@ export default class PlaylistScreen extends Component {
     super(props);
     this.state = {
       playlists: [],
-      listOfSongs: [],
-      checkList: null
+      listOfSongs: []
     };
   }
 
   createPlaylist(playlist, name) {
     createPlaylistOnDB(playlist, name).then(() => {
-      getSongsForPlaylistCreation().then((songs) => {
+      getSongsForPlaylistCreation().then((songs) => { // change this duplication
         this.setState({ listOfSongs: songs.rows._array });
-        })
+      });
+      getPlaylistsForScreen().then((playlists) => {
+      this.setState({ playlists: playlists.rows._array})
+    });
       }
     );
   }
@@ -27,12 +30,7 @@ export default class PlaylistScreen extends Component {
       this.setState({ listOfSongs: songs.rows._array });
     });
     getPlaylistsForScreen().then((playlists) => {
-      let buttonElements = this.state.playlists;
-      playlists.rows._array.forEach((playlist, index) => {
-        buttonElements.push(<Button key={index} title={playlist.Name}
-          onPress={buttonPressed}></Button>);
-      });
-      this.setState({ playlists: buttonElements });
+      this.setState({ playlists: playlists.rows._array})
     });
   }
 
@@ -40,6 +38,18 @@ export default class PlaylistScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={{ flex: 2 }}>
+          <Text>This is a list of all current playlists</Text>
+          <FlatList
+              style={{ borderRadius: 5, flex: 2, backgroundColor:"#D3D3D3" }}
+              data={this.state.playlists}
+              renderItem={({ item }) => (
+                  <ListItem
+                      title={item.Name}
+                      containerStyle={{ borderRadius: 5, borderWidth: 1, borderColor: "#D3D3D3" }}
+                  />
+                  )}
+              keyExtractor={item => item.Name}
+          />
         </View>
         <View style={styles.playlists}>
           <CheckList
@@ -145,6 +155,6 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   checkList: {
-    flex:2
+    flex: 3
   }
 });

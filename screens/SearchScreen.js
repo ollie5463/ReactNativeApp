@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { ListItem, SearchBar, ButtonGroup, Button } from 'react-native-elements';
 import {
   Text,
   FlatList,
   View,
 } from 'react-native';
-import { ListItem, SearchBar, ButtonGroup } from 'react-native-elements';
-import Helper from '../Helper';
 import _ from 'lodash';
+import Helper from '../Helper';
+import Sounds from '../components/Sounds';
 
 export default class SearchScreen extends Component {
   constructor(props) {
@@ -48,12 +50,17 @@ export default class SearchScreen extends Component {
     this.setState({selectedIndex})
   }
 
+  shuffleSong = () => {
+    const randomSongIndex = Math.round(Math.random() * this.state.fullData.length);
+    const randomSong = this.state.fullData[randomSongIndex].Name;
+    Sounds.sounds[randomSong].playAsync();
+  }
+
   handleSearch = search => {
     const formattedQuery = search.toLowerCase();
     const data = _.filter(this.state.fullData, user => {
       return contains(user, formattedQuery);
     });
-
     this.setState({ search, data });
   }
 
@@ -81,6 +88,9 @@ export default class SearchScreen extends Component {
               buttons={['By Albums', 'By Songs']}
             />
           </View>
+            <View style={{ paddingLeft: 150, alignContent: "center"}}>
+            <Ionicons name="ios-shuffle" size={100} onPress={this.shuffleSong}/>
+            </View>
         </View>
       );
   }
