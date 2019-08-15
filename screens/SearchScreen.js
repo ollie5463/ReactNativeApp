@@ -59,7 +59,6 @@ export default class SearchScreen extends Component {
 
 
   render() {
-    if (this.state.data.length !== 0) {
       return (
         <View>
           <SearchBar placeholder="Type here..."
@@ -84,9 +83,6 @@ export default class SearchScreen extends Component {
           </View>
         </View>
       );
-    } else {
-      return ( <View></View>)
-    }
   }
 }
 

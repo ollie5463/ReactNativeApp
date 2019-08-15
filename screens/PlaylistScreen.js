@@ -1,44 +1,29 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import Helper from '../Helper';
-import { CheckBox } from 'react-native-elements'
+// import { CheckBox } from 'react-native-elements'
+import { CheckList } from '../components/Checklist';
 
 export default class PlaylistScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       playlists: [],
-      playlistName: null,
-      checkBoxes: [],
-      isCheckedList: []
+      listOfSongs: [],
+      checkList: null
     };
+  }
+
+  createPlaylist(playlist, name) {
+    console.log('chosen playlist: ', playlist);
+    console.log('name: ', name);
   }
 
   componentDidMount() {
     getSongsForPlaylistCreation().then((songs) => {
-      let checkBoxes = this.state.checkBoxes;
-      let isCheckedList = [];
-      for (let i = 0; i < songs.length; i++) {
-        isCheckedList[i] = false;
-      }
-      this.setState({ isCheckedList })
-
-      songs.rows._array.forEach((song, index) => {
-        this.setState(
-          { checkBox: false }
-        )
-        checkBoxes.push(
-          <CheckBox key={index} title={song.Name} value={false}
-            // onPress={(() => {
-            //   const currentState = this.state.isCheckedList;
-            //   console.log(currentState[index]);
-            //   currentState[index] = !currentState[index];
-            //   this.setState({ isCheckedList: currentState })
-            // })}
-          ></CheckBox>
-        );
-      });
-      this.setState({ checkBoxes });
+      this.setState({ listOfSongs: songs.rows._array });
+      let checkList = <CheckList createPlaylist={this.createPlaylist.bind(this)} listOfSongs={songs.rows._array}></CheckList>
+      this.setState({ checkList });
     });
     getPlaylistsForScreen().then((playlists) => {
       let buttonElements = this.state.playlists;
@@ -53,21 +38,12 @@ export default class PlaylistScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style = {{flex: 2}}></View>
-        <View style={styles.playlists}>
-        {this.state.playlists.map((value) => {return value;}) }
-          <Button title="Create new playlist" onPress={(() => {
-            createNewPlaylist(this.state)
-          })}></Button>
-              <TextInput
-            style={{ height: 40, width: 100, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={(playlistName) => this.setState({playlistName})}
-            value={this.state.playlistName}
-          />
+        <View style={{ flex: 2 }}>
         </View>
         <View style={styles.playlists}>
-          {/* <CheckBox value={false} width={100} height={100}></CheckBox> */}
-          {this.state.checkBoxes.map((value) => { return value; })}
+          { this.state.checkList }
+        </View>
+        <View style={styles.playlists}>
         </View>
     </View>
     )
