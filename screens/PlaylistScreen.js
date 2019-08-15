@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Helper from '../Helper';
 import { ListItem } from 'react-native-elements'
 import { CheckList } from '../components/Checklist';
@@ -13,25 +13,24 @@ export default class PlaylistScreen extends Component {
     };
   }
 
-  createPlaylist(playlist, name) {
-    createPlaylistOnDB(playlist, name).then(() => {
-      getSongsForPlaylistCreation().then((songs) => { // change this duplication
+  updateScreen = () => {
+    getSongsForPlaylistCreation().then((songs) => {
         this.setState({ listOfSongs: songs.rows._array });
       });
       getPlaylistsForScreen().then((playlists) => {
       this.setState({ playlists: playlists.rows._array})
     });
+  }
+
+  createPlaylist = (playlist, name) => {
+    createPlaylistOnDB(playlist, name).then(() => {
+      this.updateScreen();
       }
     );
   }
 
   componentDidMount() {
-    getSongsForPlaylistCreation().then((songs) => {
-      this.setState({ listOfSongs: songs.rows._array });
-    });
-    getPlaylistsForScreen().then((playlists) => {
-      this.setState({ playlists: playlists.rows._array})
-    });
+    this.updateScreen();
   }
 
   render() {
@@ -40,13 +39,12 @@ export default class PlaylistScreen extends Component {
         <View style={{ flex: 2 }}>
           <Text>This is a list of all current playlists</Text>
           <FlatList
-              style={{ borderRadius: 5, flex: 2, backgroundColor:"#D3D3D3" }}
+              style={styles.flatList}
               data={this.state.playlists}
               renderItem={({ item }) => (
                   <ListItem
                       title={item.Name}
-                      containerStyle={{ borderRadius: 5, borderWidth: 1, borderColor: "#D3D3D3" }}
-                  />
+                      containerStyle={styles.listItem}/>
                   )}
               keyExtractor={item => item.Name}
           />
@@ -54,7 +52,7 @@ export default class PlaylistScreen extends Component {
         <View style={styles.playlists}>
           <CheckList
             style={styles.checkList}
-            createPlaylist={this.createPlaylist.bind(this)}
+            createPlaylist={this.createPlaylist}
             listOfSongs={this.state.listOfSongs}></CheckList>
         </View>
     </View>
@@ -146,8 +144,6 @@ PlaylistScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // width: 500,
-    // height: 500,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -156,5 +152,15 @@ const styles = StyleSheet.create({
   },
   checkList: {
     flex: 3
+  },
+  listItem: {
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#D3D3D3"
+  },
+  flatList: {
+    borderRadius: 5,
+    flex: 2,
+    backgroundColor: "#D3D3D3" 
   }
 });

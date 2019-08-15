@@ -1,5 +1,5 @@
 import { Audio } from 'expo-av';
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 export class Sounds extends Component{
 

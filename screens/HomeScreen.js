@@ -1,28 +1,34 @@
-import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
 import Helper from '../Helper';
 import Sounds from '../components/Sounds';
 
-Helper.init(); // This should be in the App.js
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    createSounds(); // This should be in App.js also
     this.state = {
       showPlayButton: true,
       currentSong: null,
     }
+  }
+
+  playButton = () => {
+    if (this.state.showPlayButton) {
+      getCurrentSong().then((song) => {
+        this.setState({ currentSong: song });
+        playSound(this.state.currentSong);
+      });
+    } else {
+      pauseSound(this.state.currentSong);
+    }
+    this.setState({ 
+      showPlayButton: !this.state.showPlayButton
+    })
   }
 
   render() {
@@ -32,20 +38,10 @@ export default class HomeScreen extends Component {
             <Ionicons name="ios-skip-backward" size={100}/>
         </View>
           <View style={styles.playButton}>
-          <Ionicons name={this.state.showPlayButton ? "ios-play" : "ios-pause"} size={150} onPress={() => {
-            if (this.state.showPlayButton) {
-              getCurrentSong().then((song) => {
-                this.setState({ currentSong: song });
-                playSound(this.state.currentSong);
-              });
-            } else {
-              pauseSound(this.state.currentSong);
-            }
-            this.setState({ 
-              showPlayButton: !this.state.showPlayButton
-            })
-            }
-          } />
+          <Ionicons
+            name={this.state.showPlayButton ? "ios-play" : "ios-pause"}
+            size={150}
+            onPress={this.playButton} />
         </View>
         <View style={styles.skipButton}>
             <Ionicons name="ios-skip-forward" size={100}/>
@@ -85,11 +81,6 @@ function getSound() {
     });
   })
 }
-
-function createSounds() {
-  Sounds.initSounds();
-}
-
 
 const styles = StyleSheet.create({
   container: {

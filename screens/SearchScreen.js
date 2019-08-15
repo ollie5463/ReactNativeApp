@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { ListItem, SearchBar, ButtonGroup, Button } from 'react-native-elements';
 import {
-  Text,
   FlatList,
   View,
 } from 'react-native';
@@ -19,10 +18,9 @@ export default class SearchScreen extends Component {
       search: '',
       selectedIndex: 1
     };
-    this.updateIndex = this.updateIndex.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     getSongs().then((songs) => {
       const data = songs.rows._array;
       this.setState({ data });
@@ -31,7 +29,7 @@ export default class SearchScreen extends Component {
     );
   }
 
-  updateIndex(selectedIndex) {
+  updateIndex = selectedIndex => {
     if (selectedIndex === 1) {
         getSongs().then((songs) => {
           const data = songs.rows._array;
