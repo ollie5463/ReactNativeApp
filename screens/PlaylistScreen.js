@@ -3,13 +3,18 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Helper from '../Helper';
 import { ListItem } from 'react-native-elements'
 import { CheckList } from '../components/Checklist';
+import { PlaylistPage } from '../components/PlaylistPage';
+import { Header } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class PlaylistScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       playlists: [],
-      listOfSongs: []
+      listOfSongs: [],
+      showSpecificPlaylist: false,
+      playListName: null
     };
   }
 
@@ -37,35 +42,49 @@ export default class PlaylistScreen extends Component {
     }
   }
 
+  handlePlaylistChange = playListName => {
+    this.setState({ showSpecificPlaylist: true, playListName });
+  }
+
   componentDidMount() {
     this.updateScreen();
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <View style={{ flex: 3, alignItems: "stretch", width: 300, height: 300, paddingBottom: 50 }}>
-          <Text style={{ flex: 1, fontSize: 25, textAlign: 'center', paddingTop: 10 }} >This is a list of all current playlists</Text>
-          <FlatList
-              style={styles.flatList}
-              data={this.state.playlists}
-              renderItem={({ item }) => (
+    if (!this.state.showSpecificPlaylist) {
+      return (
+        <View style={styles.container}>
+          <View style={{ flex: 3, alignItems: "stretch", width: 300, height: 300, paddingBottom: 50 }}>
+            <Text style={{ flex: 1, fontSize: 25, textAlign: 'center', paddingTop: 10 }} >This is a list of all current playlists</Text>
+            <FlatList
+                style={styles.flatList}
+                data={this.state.playlists}
+                renderItem={({ item }) => (
                   <ListItem
-                      title={item.Name}
-                      containerStyle={styles.listItem}/>
-                  )}
-              keyExtractor={item => item.Name}
-          />
+                    onPress={() => { this.handlePlaylistChange(item.Name) }}
+                        title={item.Name}
+                        containerStyle={styles.listItem}/>
+                    )}
+                keyExtractor={item => item.Name}
+            />
+          </View>
+          <View style={styles.playlists}>
+            <CheckList
+              style={styles.checkList}
+              createPlaylist={this.createPlaylist}
+              updateListOfSongs={this.updateListOfSongs}
+              listOfSongs={this.state.listOfSongs}></CheckList>
+          </View>
+      </View>
+      )
+    } else {
+      return (
+        <View>
+          <Ionicons name="ios-arrow-back" onPress={() => { this.setState({ showSpecificPlaylist: false }) }} size={30}/>
+          <PlaylistPage playListName={this.state.playListName} ></PlaylistPage>
         </View>
-        <View style={styles.playlists}>
-          <CheckList
-            style={styles.checkList}
-            createPlaylist={this.createPlaylist}
-            updateListOfSongs={this.updateListOfSongs}
-            listOfSongs={this.state.listOfSongs}></CheckList>
-        </View>
-    </View>
-    )
+      )
+    }
   }
 }
 

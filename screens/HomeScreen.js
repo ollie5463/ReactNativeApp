@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   StyleSheet,
-  View,
-  Text
+  View
 } from 'react-native';
 import { Header } from 'react-native-elements';
 
