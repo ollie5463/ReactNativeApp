@@ -16,7 +16,8 @@ export default class SearchScreen extends Component {
       data: [],
       fullData: [],
       search: '',
-      selectedIndex: 1
+      selectedIndex: 1,
+      currentSong: null
     };
   }
 
@@ -48,10 +49,24 @@ export default class SearchScreen extends Component {
     this.setState({selectedIndex})
   }
 
+  stopCurrentSong = song => {
+    if (song) {
+      Sounds.sounds[song].stopAsync();
+    }
+  }
+
   shuffleSong = () => {
+    this.stopCurrentSong(this.state.currentSong);
     const randomSongIndex = Math.round(Math.random() * this.state.fullData.length);
     const randomSong = this.state.fullData[randomSongIndex].Name;
+    this.setState({ currentSong: randomSong })
     Sounds.sounds[randomSong].playAsync();
+  }
+
+  playSong = song => {
+    this.stopCurrentSong(this.state.currentSong);
+    this.setState({ currentSong: song });
+    Sounds.sounds[song].playAsync();
   }
 
   handleSearch = search => {
@@ -75,6 +90,7 @@ export default class SearchScreen extends Component {
             data={this.state.data}
             renderItem={({ item }) => (
               <ListItem
+                onPress={() => { this.playSong(item.Name) }}
                 title={item.Name}/>
             )}
             keyExtractor={item => item.Name}

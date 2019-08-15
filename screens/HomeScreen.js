@@ -45,7 +45,7 @@ export default class HomeScreen extends Component {
     const textForHeader = this.state.currentSong === null ? 'Click to play a song' : `Listening to: ${this.state.currentSong}`;
     this.setState({
       header: <Header
-        centerComponent={{ text: textForHeader, style: { color: '#fff' } }}
+        centerComponent={{ text: textForHeader, style: { color: '#fff' }  }}
       />
     });
     this.forceUpdate();
