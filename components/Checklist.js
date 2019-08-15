@@ -24,24 +24,29 @@ export class CheckList extends Component {
 
     render() {
         return (
-            <View style={{flex: 1, height: 800 }} >
-                <View>
+            <View style={{flex: 1, justifyContent: 'center' }} >
                 <TextInput
-                    style={{ height: 40, width: 100, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={(playlistName) => this.setState({playlistName})}
+                    style={{ fontSize: 20, height: 40, width: 250, borderColor: "#D3D3D3", borderWidth: 1}}
+                    onChangeText={(playlistName) => this.setState({ playlistName })}
+                    placeholder="Enter new playlist name"    
                     value={this.state.playlistName}
                 />
+                <View>
             </View>
                 <FlatList
+                    style={{ flex: 2, backgroundColor:"#D3D3D3" }}
                     data={this.props.listOfSongs}
                     renderItem={({ item }) => (
                         <ListItem
                             onPress={(() => { this.itemChosen(item); })}
-                            title={item.Name}/>
+                            title={item.Name}
+                            containerStyle={{ borderWidth: 1, borderColor: "#D3D3D3" }}
+                        />
+                        
                         )}
                     keyExtractor={item => item.Name}
                 />
-                <Button title="Create new playlist" onPress={(() => {
+                <Button style={{ flex: 1 }} title="Create new playlist" onPress={(() => {
                     this.createNewPlaylistHandler()
                 })}/>
             </View>

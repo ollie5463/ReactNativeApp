@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Helper from '../Helper';
-// import { CheckBox } from 'react-native-elements'
 import { CheckList } from '../components/Checklist';
 
 export default class PlaylistScreen extends Component {
@@ -15,15 +14,17 @@ export default class PlaylistScreen extends Component {
   }
 
   createPlaylist(playlist, name) {
-    console.log('chosen playlist: ', playlist);
-    console.log('name: ', name);
+    createPlaylistOnDB(playlist, name).then(() => {
+      getSongsForPlaylistCreation().then((songs) => {
+        this.setState({ listOfSongs: songs.rows._array });
+        })
+      }
+    );
   }
 
   componentDidMount() {
     getSongsForPlaylistCreation().then((songs) => {
       this.setState({ listOfSongs: songs.rows._array });
-      let checkList = <CheckList createPlaylist={this.createPlaylist.bind(this)} listOfSongs={songs.rows._array}></CheckList>
-      this.setState({ checkList });
     });
     getPlaylistsForScreen().then((playlists) => {
       let buttonElements = this.state.playlists;
@@ -41,17 +42,64 @@ export default class PlaylistScreen extends Component {
         <View style={{ flex: 2 }}>
         </View>
         <View style={styles.playlists}>
-          { this.state.checkList }
-        </View>
-        <View style={styles.playlists}>
+          <CheckList
+            style={styles.checkList}
+            createPlaylist={this.createPlaylist.bind(this)}
+            listOfSongs={this.state.listOfSongs}></CheckList>
         </View>
     </View>
     )
   }
 }
 
-function createNewPlaylist(state) {
-  console.log('state>>> ', state.songCheckBoxes[0]);
+function createPlaylistOnDB(songs, name) {
+  return new Promise((resolve) => {
+    insertNewPlaylistInDB(name).then(() => {
+      getIDFromPlaylist(name).then((result) => {
+        addPlaylistToSongs(songs, result.rows._array[0].ID).then(() => {
+          resolve();
+        })
+      });
+    });
+  })
+}
+
+function addPlaylistToSongs(songs, id) {
+  return new Promise((resolve) => {
+    let promiseArray = [];
+    const dataBase = Helper.database;
+    songs.forEach((songName) => {
+      promiseArray.push(
+        dataBase.DB.transaction(tx => {
+          tx.executeSql(`UPDATE Song SET Playlist_ID=${id} WHERE Name='${songName}'`, [], (tx, result) => {
+          })
+        })
+      )
+    });
+    Promise.all(promiseArray).then(resolve());
+  });
+}
+
+function getIDFromPlaylist(name) {
+    return new Promise((resolve) => {
+    const dataBase = Helper.database;
+    dataBase.DB.transaction(tx => {
+      tx.executeSql(`SELECT ID FROM Playlist WHERE Name='${name}';`, [], (tx, result) => {
+        resolve(result);
+      })
+    });
+  });
+}
+
+function insertNewPlaylistInDB(name) {
+  return new Promise((resolve) => {
+    const dataBase = Helper.database;
+    dataBase.DB.transaction(tx => {
+      tx.executeSql(`INSERT INTO Playlist (Name) values ('${name}');`, [], (tx, result) => {
+        resolve();
+      })
+    });
+  });
 }
 
 function buttonPressed(props) {
@@ -63,6 +111,7 @@ function getSongsForPlaylistCreation() {
     const dataBase = Helper.database;
     dataBase.DB.transaction(tx => {
       tx.executeSql(`SELECT * FROM Song WHERE Playlist_ID IS NULL`, [], (tx, result) => {
+        console.log('CALLED IS NULL ');
           resolve(result);
         })
     });
@@ -87,14 +136,15 @@ PlaylistScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 500,
-    height: 500,
+    // width: 500,
+    // height: 500,
     justifyContent: 'center',
     alignItems: 'center',
   },
   playlists: {
     flex: 2,
-    width: 400,
-    height: 400,
+  },
+  checkList: {
+    flex:2
   }
 });
