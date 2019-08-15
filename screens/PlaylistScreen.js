@@ -28,6 +28,14 @@ export default class PlaylistScreen extends Component {
       }
     );
   }
+  updateListOfSongs = song => {
+    const listOfSongs = this.state.listOfSongs;
+    const index = listOfSongs.indexOf(song);
+    if (index !== -1) {
+      listOfSongs.splice(index, 1);
+        this.setState({ listOfSongs  });
+    }
+  }
 
   componentDidMount() {
     this.updateScreen();
@@ -36,8 +44,8 @@ export default class PlaylistScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{ flex: 2 }}>
-          <Text>This is a list of all current playlists</Text>
+        <View style={{ flex: 3, alignItems: "stretch", width: 300, height: 300, paddingBottom: 50 }}>
+          <Text style={{ flex: 1, fontSize: 25, textAlign: 'center', paddingTop: 10 }} >This is a list of all current playlists</Text>
           <FlatList
               style={styles.flatList}
               data={this.state.playlists}
@@ -53,6 +61,7 @@ export default class PlaylistScreen extends Component {
           <CheckList
             style={styles.checkList}
             createPlaylist={this.createPlaylist}
+            updateListOfSongs={this.updateListOfSongs}
             listOfSongs={this.state.listOfSongs}></CheckList>
         </View>
     </View>
@@ -110,16 +119,11 @@ function insertNewPlaylistInDB(name) {
   });
 }
 
-function buttonPressed(props) {
-  console.log(props);
-}
-
 function getSongsForPlaylistCreation() {
   return new Promise((resolve) => {
     const dataBase = Helper.database;
     dataBase.DB.transaction(tx => {
       tx.executeSql(`SELECT * FROM Song WHERE Playlist_ID IS NULL`, [], (tx, result) => {
-        console.log('CALLED IS NULL ');
           resolve(result);
         })
     });
@@ -148,7 +152,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   playlists: {
-    flex: 2,
+    flex: 3,
+    width: 300
   },
   checkList: {
     flex: 3
@@ -160,7 +165,9 @@ const styles = StyleSheet.create({
   },
   flatList: {
     borderRadius: 5,
+    paddingBottom: 50,
+    height: 300,
     flex: 2,
-    backgroundColor: "#D3D3D3" 
+    backgroundColor: "#D3D3D3"
   }
 });

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, Button, TextInput, ScrollView } from 'react-native';
+import { View, FlatList, TextInput, Button } from 'react-native';
 import { ListItem } from 'react-native-elements'
 
 export class CheckList extends Component {
@@ -10,11 +10,13 @@ export class CheckList extends Component {
             playlistName: null
         };
     }
-    createNewPlaylistHandler() {
+    createNewPlaylistHandler = () => {
+        this.setState({ playlistName: null });
         this.props.createPlaylist(this.state.chosenItems, this.state.playlistName);
     }
     
-    itemChosen(item) {
+    itemChosen = (item) => {
+        this.props.updateListOfSongs(item);
         if (this.state.chosenItems.indexOf(item.Name) === -1) {
             this.state.chosenItems.push(item.Name)
         }
@@ -24,7 +26,7 @@ export class CheckList extends Component {
         return (
             <View style={{flex: 2, justifyContent: 'center' }} >
                 <TextInput
-                    style={{  fontSize: 20, height: 40, width: 250, borderColor: "#D3D3D3", borderWidth: 1}}
+                    style={{ fontSize: 20, height: 40, width: 300, borderColor: "#D3D3D3", borderWidth: 1}}
                     onChangeText={(playlistName) => this.setState({ playlistName })}
                     placeholder="Enter new playlist name"    
                     value={this.state.playlistName}
@@ -36,16 +38,14 @@ export class CheckList extends Component {
                     data={this.props.listOfSongs}
                     renderItem={({ item }) => (
                         <ListItem
-                            onPress={(() => { this.itemChosen(item); })}
+                            onPress={() => { this.itemChosen(item) }}
                             title={item.Name}
                             containerStyle={{ borderRadius: 5, borderWidth: 1, borderColor: "#D3D3D3" }}
                         />
                         )}
                     keyExtractor={item => item.Name}
                 />
-                <Button style={{ flex: 1 }} title="Create new playlist" onPress={(() => {
-                    this.createNewPlaylistHandler()
-                })}/>
+                <Button style={{ flex: 1 }} title="Create new playlist" onPress={this.createNewPlaylistHandler}/>
             </View>
         )
     }

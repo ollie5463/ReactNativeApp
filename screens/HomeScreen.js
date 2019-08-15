@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   StyleSheet,
-  View
+  View,
+  Text
 } from 'react-native';
+import { Header } from 'react-native-elements';
 
 import Helper from '../Helper';
 import Sounds from '../components/Sounds';
@@ -14,7 +16,12 @@ export default class HomeScreen extends Component {
     this.state = {
       showPlayButton: true,
       currentSong: null,
+      header: null
     }
+  }
+
+  componentDidMount = () => {
+    this.createHeader();
   }
 
   playButton = () => {
@@ -26,27 +33,40 @@ export default class HomeScreen extends Component {
     } else {
       pauseSound(this.state.currentSong);
     }
-    this.setState({ 
+    this.setState({
       showPlayButton: !this.state.showPlayButton
-    })
+    }, () => { setTimeout(() => {
+          this.createHeader();
+        }, 5);
+    });
+  }
+
+  createHeader = () => {
+    const textForHeader = this.state.currentSong === null ? 'Click to play a song' : `Listening to: ${this.state.currentSong}`;
+    this.setState({
+      header: <Header
+        centerComponent={{ text: textForHeader, style: { color: '#fff' } }}
+      />
+    });
+    this.forceUpdate();
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.skipBackwardButton}>
-            <Ionicons name="ios-skip-backward" size={100}/>
+      <View style={{ flex: 6 }}>
+        <View style={{ flex: 2 }}>
+          {this.state.header}
         </View>
-          <View style={styles.playButton}>
+          <View style={{ flex: 2, flexDirection:"row", justifyContent: 'space-between'}}>
+            <Ionicons style={{ paddingLeft: 20, paddingTop: 25  }} name="ios-skip-backward" size={100}/>
           <Ionicons
-            name={this.state.showPlayButton ? "ios-play" : "ios-pause"}
-            size={150}
-            onPress={this.playButton} />
+              name={this.state.showPlayButton ? "ios-play" : "ios-pause"}
+              size={150}
+              onPress={this.playButton} />
+            <Ionicons style={{ paddingRight: 20, paddingTop: 25 }} name="ios-skip-forward" size={100}/>
+            </View>
+          <View style={{ flex:2 }}></View>
         </View>
-        <View style={styles.skipButton}>
-            <Ionicons name="ios-skip-forward" size={100}/>
-        </View>
-      </View>
     );
   }
 }
