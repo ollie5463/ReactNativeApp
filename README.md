@@ -29,3 +29,5 @@ If you do not have expo installed globally, it will give you a prompt to downloa
 $ npm install -g expo-cli
 ```
 This will then run a Metro Bundler on your local host. Once the 'tunnel ready' command is displayed, it will automatically run this app on your default simulator. The phone used to develop this was IPhone 8.
+
+If the app doesn't show up in simulator, cancel the terminal command and rerun it. If you're struggling to get it running try the expo docs https://docs.expo.io/versions/v34.0.0/introduction/installation/ 
