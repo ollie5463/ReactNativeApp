@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { View, FlatList, TextInput, Button } from 'react-native';
 import { ListItem, Header } from 'react-native-elements'
 import { Helper } from '../Helper';
-import { Sounds } from '../components/Sounds';
+import { Sounds } from './Sounds';
 import { Ionicons } from '@expo/vector-icons';
 
-export class PlaylistPage extends Component {
+export class SpecificPlaylistPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -46,9 +46,10 @@ export class PlaylistPage extends Component {
 
     render() {
         return (
-            <View>
+            <View style={{justifyContent: 'center'}}>
                 <Header
-                    centerComponent={{ text: this.state.playListName, style: { color: '#fff' }  }}
+                    backgroundColor="#ffffff"
+                    centerComponent={{ backgroundColor:'#ffffff', text: this.state.playListName, style: { color: '#000000', fontSize: 30, paddingBottom: 100 }  }}
                 />
                 <FlatList
                     data={this.state.listOfSongs}
@@ -60,7 +61,7 @@ export class PlaylistPage extends Component {
                     )}
                     keyExtractor={item => item.Name}
                 />
-                <Ionicons name="ios-shuffle" size={100} onPress={this.shuffleSong}/>
+                <Ionicons name="ios-shuffle" style={{ paddingLeft: 150 }} size={100} onPress={this.shuffleSong}/>
             </View>
         )
     }
@@ -89,4 +90,4 @@ function getSongsForPlaylist(id) {
   });
 }
 
-export default PlaylistPage;
+export default SpecificPlaylistPage;
