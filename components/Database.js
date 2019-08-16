@@ -24,13 +24,31 @@ export class Database {
             tx.executeSql(`INSERT INTO Playlist (Name) values ('Ollies playlist');`)
         });
         this.DB.transaction(tx => {
-            tx.executeSql(`INSERT INTO Song (Name) values ('classical_music_1');`)
+            tx.executeSql(`INSERT INTO Song (Name, Playlist_ID) values ('classical_music_1', 1);`)
         });
         this.DB.transaction(tx => {
-            tx.executeSql(`INSERT INTO Song (Name) values ('classical_music_2');`)
+            tx.executeSql(`INSERT INTO Song (Name, Playlist_ID) values ('classical_music_2', 2);`)
         });
         this.DB.transaction(tx => {
-            tx.executeSql(`INSERT INTO Song (Name) values ('background_music');`)
+            tx.executeSql(`INSERT INTO Song (Name, Playlist_ID) values ('dnb1', 2);`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name, Playlist_ID) values ('dnb2', 1);`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name) values ('dnb4');`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name) values ('classical_music_3');`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name) values ('classical_music_4');`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name) values ('dnb3');`)
+        });
+        this.DB.transaction(tx => {
+            tx.executeSql(`INSERT INTO Song (Name, Playlist_ID) values ('background_music', 2);`)
         });
     }
 

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Helper from '../Helper';
 import { ListItem } from 'react-native-elements'
 import { CheckList } from '../components/Checklist';
-import { PlaylistPage } from '../components/PlaylistPage';
+import { SpecificPlaylistPage } from '../components/SpecificPlaylistPage';
 import { Header } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -81,7 +81,7 @@ export default class PlaylistScreen extends Component {
       return (
         <View>
           <Ionicons name="ios-arrow-back" onPress={() => { this.setState({ showSpecificPlaylist: false }) }} size={30}/>
-          <PlaylistPage playListName={this.state.playListName} ></PlaylistPage>
+          <SpecificPlaylistPage playListName={this.state.playListName} ></SpecificPlaylistPage>
         </View>
       )
     }
