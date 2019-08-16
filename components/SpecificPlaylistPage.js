@@ -49,7 +49,11 @@ export class SpecificPlaylistPage extends Component {
             <View style={{justifyContent: 'center'}}>
                 <Header
                     backgroundColor="#ffffff"
-                    centerComponent={{ backgroundColor:'#ffffff', text: this.state.playListName, style: { color: '#000000', fontSize: 30, paddingBottom: 100 }  }}
+                    centerComponent={{
+                        backgroundColor: '#ffffff',
+                        text: this.state.playListName,
+                        style: { color: '#000000', fontSize: 30, paddingBottom: 100 }
+                    }}
                 />
                 <FlatList
                     data={this.state.listOfSongs}
