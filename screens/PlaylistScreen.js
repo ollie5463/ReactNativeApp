@@ -62,7 +62,7 @@ export default class PlaylistScreen extends Component {
                 renderItem={({ item }) => (
                   <ListItem
                     onPress={() => { this.handlePlaylistChange(item.Name) }}
-                        title={item.Name}
+                    title={item.Name}
                         containerStyle={styles.listItem}/>
                     )}
                 keyExtractor={item => item.Name}

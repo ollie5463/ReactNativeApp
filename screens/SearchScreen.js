@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { ListItem, SearchBar, ButtonGroup, Button } from 'react-native-elements';
+import { ListItem, SearchBar, ButtonGroup } from 'react-native-elements';
 import {
   FlatList,
   View,
@@ -57,7 +57,7 @@ export default class SearchScreen extends Component {
 
   shuffleSong = () => {
     this.stopCurrentSong(this.state.currentSong);
-    const randomSongIndex = Math.round(Math.random() * this.state.fullData.length);
+    const randomSongIndex = Math.floor(Math.random() * this.state.fullData.length);
     const randomSong = this.state.fullData[randomSongIndex].Name;
     this.setState({ currentSong: randomSong })
     Sounds.sounds[randomSong].playAsync();
